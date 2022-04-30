@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane stylesheets="/Style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.file.net.storage.SecondaryController">
+<BorderPane stylesheets="/Style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.file.gb_cloud.SecondaryController">
     <top>
         <HBox alignment="CENTER" maxWidth="Infinity">
             <Label alignment="CENTER" text="Файлы на устройстве">
@@ -18,11 +18,15 @@
         </HBox>
     </top>
     <center>
-
+        <HBox alignment="CENTER">
+            <TextArea fx:id="Local" editable="false"/>
+            <TextArea fx:id="Server" editable="false"/>
+        </HBox>
     </center>
     <bottom>
         <HBox alignment="CENTER">
-            <Button text="Переместить" textAlignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            <Button text="Загрузить" textAlignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            <Button text="Скачать" textAlignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
             <Button onAction="#clickBtnExit" text="Выйти" textAlignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
         </HBox>
     </bottom>

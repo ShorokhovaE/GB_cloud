@@ -25,6 +25,21 @@
             <artifactId>junit-jupiter</artifactId>
             <version>5.8.2</version>
         </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.76.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.34.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -46,7 +61,7 @@
                         <!-- Usage: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>ru.gb.file.net.storage.App</mainClass>
+                            <mainClass>ru.gb.file.gb_cloud.App</mainClass>
                         </configuration>
                     </execution>
                 </executions>
