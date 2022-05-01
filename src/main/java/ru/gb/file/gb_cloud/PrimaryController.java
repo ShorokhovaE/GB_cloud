@@ -1,7 +1,10 @@
 package ru.gb.file.gb_cloud;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -38,12 +41,18 @@ public class PrimaryController implements Initializable {
 
     private Connect connect;
 
-
-
-
     @FXML
     public void loginOk() throws IOException {
        App.setRoot("secondary");
+        pathDir(AuthLogin.getText().trim());
+    }
+
+    public void pathDir(String login) throws IOException {
+        Path p = Path.of("src/main/clients.directory/", login);
+        Files.walk(p, 3)
+                .map(Path::toFile)
+                .filter(file -> file.isFile())
+                .forEach(System.out::println);
     }
 
 
@@ -64,6 +73,7 @@ public class PrimaryController implements Initializable {
         RegPanel.setManaged(true);
     }
 // авторизация
+@FXML
     public void clickBtnGo(ActionEvent actionEvent) {
         AuthRequest authRequest = new AuthRequest(AuthLogin.getText().trim(), AuthPassword.getText().trim());
         connect.getChannel().writeAndFlush(authRequest);
