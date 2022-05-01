@@ -4,11 +4,14 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import ru.gb.file.gb_cloud.dto.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
 
 public class BasicHandler extends ChannelInboundHandlerAdapter {
+
+    private final static String LOGIN_OK = "login_ok";
+    private final static String LOGIN_NO = "login_no";
+    private final static String REG_OK = "reg_ok";
+    private final static String REG_NO = "reg_no";
+
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -22,19 +25,19 @@ public class BasicHandler extends ChannelInboundHandlerAdapter {
 
         if (request instanceof AuthRequest) {
             if(((AuthRequest) request).checkLoginAndPassword()){
-                BasicResponse loginOkResponse = new BasicResponse("login ok");
+                BasicResponse loginOkResponse = new BasicResponse(LOGIN_OK);
                 channelHandlerContext.writeAndFlush(loginOkResponse);
             } else {
-                BasicResponse loginNoResponse = new BasicResponse("login no");
+                BasicResponse loginNoResponse = new BasicResponse(LOGIN_NO);
                 channelHandlerContext.writeAndFlush(loginNoResponse);
             }
         } else if(request instanceof RegRequest){
             if(((RegRequest) request).registration()){
-                BasicResponse loginNoResponse = new BasicResponse("reg ok");
-                channelHandlerContext.writeAndFlush(loginNoResponse);
+                BasicResponse regOkResponse = new BasicResponse(REG_OK);
+                channelHandlerContext.writeAndFlush(regOkResponse);
             } else {
-                BasicResponse loginNoResponse = new BasicResponse("reg no");
-                channelHandlerContext.writeAndFlush(loginNoResponse);
+                BasicResponse regNoResponse = new BasicResponse(REG_NO);
+                channelHandlerContext.writeAndFlush(regNoResponse);
             }
         }
         else if (request instanceof GetFileListRequest) {

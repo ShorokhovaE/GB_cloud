@@ -3,15 +3,8 @@ package ru.gb.file.gb_cloud;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import ru.gb.file.gb_cloud.dto.BasicResponse;
-import ru.gb.file.gb_cloud.dto.GetFileListRequest;
-import javax.inject.Inject;
-
-import java.io.File;
 
 public class ClientHandler extends ChannelInboundHandlerAdapter {
-//
-//    @Inject
-    private PrimaryController primaryController;
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -24,10 +17,18 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         System.out.println(response.getResponse());
         String responseText = response.getResponse();
 
-        if("login ok".equals(responseText)){
-           new PrimaryController().switchToSecondary();
-        } if("login no".equals(responseText)){
-
+        if("login_ok".equals(responseText)){
+            PrimaryController pr =
+                    (PrimaryController) ControllerRegistry.getControllerObject(PrimaryController.class);
+            pr.loginOk();
+        } if("login_no".equals(responseText)){
+            PrimaryController pr =
+                    (PrimaryController) ControllerRegistry.getControllerObject(PrimaryController.class);
+            pr.loginNo();
+        } if("reg_no".equals(responseText)){
+            PrimaryController pr =
+                    (PrimaryController) ControllerRegistry.getControllerObject(PrimaryController.class);
+            pr.regNo();
         }
 
 //        if ("file list....".equals(responseText)) {

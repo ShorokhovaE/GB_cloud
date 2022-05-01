@@ -2,8 +2,12 @@
 .root{
     -fx-font-size: 20;
     -fx-background-image: url("https://bogatyr.club/uploads/posts/2021-11/1636920835_47-bogatyr-club-p-fon-dlya-prilozheniya-47.jpg");
-    -fx-font-family: "Bradley Hand";
     }
+
+#LoginNo: {
+        -fx-text-fill: red;
+        -fx-background-color: red;
+        }
 
 .button{
         -fx-border-color: transparent;
