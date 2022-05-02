@@ -4,30 +4,39 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane stylesheets="/Style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.file.gb_cloud.SecondaryController">
+<BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.file.gb_cloud.SecondaryController">
     <top>
-        <HBox alignment="CENTER" maxWidth="Infinity">
-            <Label alignment="CENTER" text="Файлы на устройстве">
-            <HBox.margin>
-               <Insets right="20.0" />
-            </HBox.margin></Label>
-            <Label alignment="CENTER" text="Файлы на сервере">
-            <HBox.margin>
-               <Insets left="20.0" />
-            </HBox.margin></Label>
+        <HBox alignment="CENTER">
+            <VBox>
+                <Label text="Файлы на устройстве" maxWidth="Infinity">
+                    <HBox.margin>
+                        <Insets right="20.0" />
+                    </HBox.margin></Label>
+                <HBox>
+                    <TextField fx:id="localPathField" editable="false" HBox.hgrow="ALWAYS" />
+                    <Button onAction="#btnLocalPathUpAction" text="Вверх" />
+                </HBox>
+            </VBox>
+            <VBox>
+                <Label text="Файлы на сервере" maxWidth="Infinity"/>
+                <HBox>
+                    <TextField fx:id="serverPathField" editable="false" HBox.hgrow="ALWAYS" />
+                    <Button onAction="#btnServerPathUpAction" text="Вверх" />
+                </HBox>
+            </VBox>
         </HBox>
     </top>
     <center>
         <HBox alignment="CENTER">
-            <TextArea fx:id="Local" editable="false"/>
-            <TextArea fx:id="Server" editable="false"/>
+            <TableView fx:id="local" />
+            <TableView fx:id="server"/>
         </HBox>
     </center>
     <bottom>
         <HBox alignment="CENTER">
-            <Button text="Загрузить" textAlignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-            <Button text="Скачать" textAlignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-            <Button onAction="#clickBtnExit" text="Выйти" textAlignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            <Button maxWidth="Infinity" text="Загрузить" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
+            <Button maxWidth="Infinity" text="Скачать" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
+            <Button maxWidth="Infinity" onAction="#clickBtnExit" text="Выйти" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
         </HBox>
     </bottom>
 

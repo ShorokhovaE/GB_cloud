@@ -44,15 +44,6 @@ public class PrimaryController implements Initializable {
     @FXML
     public void loginOk() throws IOException {
        App.setRoot("secondary");
-        pathDir(AuthLogin.getText().trim());
-    }
-
-    public void pathDir(String login) throws IOException {
-        Path p = Path.of("src/main/clients.directory/", login);
-        Files.walk(p, 3)
-                .map(Path::toFile)
-                .filter(file -> file.isFile())
-                .forEach(System.out::println);
     }
 
 

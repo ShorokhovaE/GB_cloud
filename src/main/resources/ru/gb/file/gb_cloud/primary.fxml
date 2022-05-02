@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane stylesheets="/Style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.file.gb_cloud.PrimaryController">
+<BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.file.gb_cloud.PrimaryController">
    <top>
       <HBox maxHeight="Infinity">
          <Button maxWidth="Infinity" minHeight="30" onAction="#OpenAuthPanel" text="Авторизация" HBox.hgrow="ALWAYS">
