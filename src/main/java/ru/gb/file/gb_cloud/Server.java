@@ -11,7 +11,6 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
-import ru.gb.file.gb_cloud.dto.AuthRequest;
 import ru.gb.file.gb_cloud.dto.DBConnect;
 
 public class Server {

@@ -43,6 +43,12 @@ public class BasicHandler extends ChannelInboundHandlerAdapter {
         else if (request instanceof GetFileListRequest) {
             BasicResponse basicResponse = new BasicResponse("file list....");
             channelHandlerContext.writeAndFlush(basicResponse);
+        } else if (request instanceof DisconnectRequest) {
+            System.out.println("Попытка выйти");
+            BasicResponse basicResponse = new BasicResponse("log_off");
+            channelHandlerContext.writeAndFlush(basicResponse);
+        } else if(request instanceof LoadFileRequest){
+
         }
     }
 

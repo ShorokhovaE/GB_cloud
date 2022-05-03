@@ -13,6 +13,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+
         BasicResponse response = (BasicResponse) msg;
         System.out.println(response.getResponse());
         String responseText = response.getResponse();
@@ -29,6 +30,8 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
             PrimaryController pr =
                     (PrimaryController) ControllerRegistry.getControllerObject(PrimaryController.class);
             pr.regNo();
+        }if("log_off".equals(responseText)){
+            System.out.println("Клиент вышел");
         }
 
 //        if ("file list....".equals(responseText)) {

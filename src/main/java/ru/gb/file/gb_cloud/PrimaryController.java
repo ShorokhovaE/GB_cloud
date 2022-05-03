@@ -39,6 +39,10 @@ public class PrimaryController implements Initializable {
     @FXML
     public Label PassSame;
 
+    public Connect getConnect() {
+        return connect;
+    }
+
     private Connect connect;
 
     @FXML
@@ -68,7 +72,6 @@ public class PrimaryController implements Initializable {
     public void clickBtnGo(ActionEvent actionEvent) {
         AuthRequest authRequest = new AuthRequest(AuthLogin.getText().trim(), AuthPassword.getText().trim());
         connect.getChannel().writeAndFlush(authRequest);
-
     }
 
     public void loginNo(){
