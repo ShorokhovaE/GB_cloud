@@ -9,7 +9,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import ru.gb.file.gb_cloud.dto.DownloadFileRequest;
+import ru.gb.file.gb_cloud.dto.LoadFileRequest;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -24,6 +27,8 @@ public class ServerFilePanelController implements Initializable {
     public TextField pathField;
     @FXML
     public TableView <FileInfo> fileTable;
+
+    private Connect connect;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -75,6 +80,24 @@ public class ServerFilePanelController implements Initializable {
 
     @FXML
     public void clickBtnDownload(ActionEvent actionEvent) {
-        System.out.println(fileTable.getSelectionModel().getSelectedItem().getFileName());
+
+        if(fileTable.getSelectionModel().getSelectedItem().getFileName() == null){
+            System.out.println("файл не выбран");
+        } else {
+            System.out.println(fileTable.getSelectionModel().getSelectedItem().getFileName());
+            System.out.println(fileTable.getSelectionModel().getSelectedItem().getPath());
+        }
+
+        DownloadFileRequest dfr =
+                new DownloadFileRequest(fileTable.getSelectionModel().getSelectedItem().getPath());
+        PrimaryController pr =
+                (PrimaryController) ControllerRegistry.getControllerObject(PrimaryController.class);
+
+        connect = pr.getConnect();
+        connect.getChannel().writeAndFlush(dfr);
+    }
+
+    public void btnUpdateFileList(ActionEvent actionEvent) {
+        updatePath(Path.of(pathField.getText()));
     }
 }

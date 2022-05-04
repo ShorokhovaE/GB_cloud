@@ -3,6 +3,8 @@ package ru.gb.file.gb_cloud;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import ru.gb.file.gb_cloud.dto.BasicResponse;
+import ru.gb.file.gb_cloud.dto.LoadFileRequest;
+import java.io.FileOutputStream;
 
 public class ClientHandler extends ChannelInboundHandlerAdapter {
 
@@ -32,6 +34,11 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
             pr.regNo();
         }if("log_off".equals(responseText)){
             System.out.println("Клиент вышел");
+        } if("download_ok".equals(responseText)) {
+            System.out.println("Скачивание файла");
+            String pathOfFile = String.format("./%", response.getFile().getName());
+            FileOutputStream fos = new FileOutputStream(pathOfFile);
+            fos.write((response).getData());
         }
 
 //        if ("file list....".equals(responseText)) {

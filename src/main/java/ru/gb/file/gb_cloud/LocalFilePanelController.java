@@ -12,6 +12,8 @@ import javafx.scene.input.MouseEvent;
 import ru.gb.file.gb_cloud.dto.LoadFileRequest;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -78,7 +80,7 @@ public class LocalFilePanelController implements Initializable {
     }
 
     @FXML
-    public void clickBtnLoad(ActionEvent actionEvent) {
+    public void clickBtnLoad(ActionEvent actionEvent) throws IOException {
 
         if(fileTable.getSelectionModel().getSelectedItem().getFileName() == null){
             System.out.println("файл не выбран");
@@ -86,17 +88,18 @@ public class LocalFilePanelController implements Initializable {
             System.out.println(fileTable.getSelectionModel().getSelectedItem().getFileName());
             System.out.println(fileTable.getSelectionModel().getSelectedItem().getPath());
         }
-//остановилась тут
-//        задача по отправке файлов
+
+        LoadFileRequest loadFileRequest = new LoadFileRequest(new File(String.valueOf(fileTable.getSelectionModel().getSelectedItem().getPath())),fileTable.getSelectionModel().getSelectedItem().getFileName());
 
         PrimaryController pr =
                 (PrimaryController) ControllerRegistry.getControllerObject(PrimaryController.class);
         connect = pr.getConnect();
-
-        LoadFileRequest loadFileRequest = new LoadFileRequest(new File(String.valueOf(fileTable.getSelectionModel().getSelectedItem().getPath())));
-
         connect.getChannel().writeAndFlush(loadFileRequest);
 
+    }
 
+    @FXML
+    public void btnUpdateFileList(ActionEvent actionEvent) {
+        updatePath(Path.of(pathField.getText()));
     }
 }

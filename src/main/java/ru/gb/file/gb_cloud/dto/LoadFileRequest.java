@@ -1,25 +1,23 @@
 package ru.gb.file.gb_cloud.dto;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 
 public class LoadFileRequest implements BasicRequest {
 
     private File file;
 
-    private String path;
+    private String fileName;
 
     private byte[] data;
 
-    public String getPath() {
-        return file.getPath();
+    public String getFilename() {
+        return fileName;
     }
 
-    public LoadFileRequest(File file) {
+    public LoadFileRequest(File file, String fileName) {
         this.file = file;
+        this.fileName = fileName;
     }
 
     @Override
@@ -33,8 +31,6 @@ public class LoadFileRequest implements BasicRequest {
         f.read(fileInArray);
         return fileInArray;
     }
-
-
 
 
 
