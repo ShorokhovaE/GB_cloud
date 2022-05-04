@@ -9,7 +9,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import ru.gb.file.gb_cloud.dto.LoadFileRequest;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -82,6 +84,7 @@ public class LocalFilePanelController implements Initializable {
             System.out.println("файл не выбран");
         } else {
             System.out.println(fileTable.getSelectionModel().getSelectedItem().getFileName());
+            System.out.println(fileTable.getSelectionModel().getSelectedItem().getPath());
         }
 //остановилась тут
 //        задача по отправке файлов
@@ -89,6 +92,11 @@ public class LocalFilePanelController implements Initializable {
         PrimaryController pr =
                 (PrimaryController) ControllerRegistry.getControllerObject(PrimaryController.class);
         connect = pr.getConnect();
+
+        LoadFileRequest loadFileRequest = new LoadFileRequest(new File(String.valueOf(fileTable.getSelectionModel().getSelectedItem().getPath())));
+
+        connect.getChannel().writeAndFlush(loadFileRequest);
+
 
     }
 }

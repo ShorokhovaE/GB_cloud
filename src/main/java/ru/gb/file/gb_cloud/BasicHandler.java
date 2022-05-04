@@ -4,6 +4,10 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import ru.gb.file.gb_cloud.dto.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Path;
+
 
 public class BasicHandler extends ChannelInboundHandlerAdapter {
 
@@ -48,7 +52,9 @@ public class BasicHandler extends ChannelInboundHandlerAdapter {
             BasicResponse basicResponse = new BasicResponse("log_off");
             channelHandlerContext.writeAndFlush(basicResponse);
         } else if(request instanceof LoadFileRequest){
-
+            String pathOfFile = ((LoadFileRequest) request).getPath();
+            FileOutputStream fos = new FileOutputStream(pathOfFile);
+            fos.write(((LoadFileRequest) request).getData());
         }
     }
 
