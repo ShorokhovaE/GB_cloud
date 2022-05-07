@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="ru.gb.client.LocalFilePanelController">
+
+    <userData>
+        <fx:reference source="controller" />
+    </userData>
+
+    <Label alignment="CENTER" text="Файлы на устройстве" maxWidth="Infinity"/>
+
+    <HBox>
+        <TextField fx:id="pathField" editable="false" HBox.hgrow="ALWAYS" />
+        <Button onAction="#btnUpAction" text="Вверх" />
+        <Button onAction="#btnUpdateFileList" text="Обновить" />
+    </HBox>
+
+    <TableView fx:id="fileTable" />
+
+    <Button maxWidth="Infinity" onAction="#clickBtnLoad" text="Загрузить" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
+
+</VBox>
