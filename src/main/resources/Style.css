@@ -1,0 +1,31 @@
+
+.root{
+    -fx-font-size: 20;
+    -fx-background-image: url("https://bogatyr.club/uploads/posts/2021-11/1636920835_47-bogatyr-club-p-fon-dlya-prilozheniya-47.jpg");
+    }
+
+#LoginNo: {
+        -fx-text-fill: red;
+        -fx-background-color: red;
+        }
+
+.button{
+        -fx-border-color: transparent;
+        -fx-border-width: 2;
+        -fx-background-radius: 5;
+        -fx-background-color: transparent;
+        -fx-border-radius: 5, 5;
+        -fx-border-color: transparent, #006363;
+    }
+
+.button:pressed {
+        -fx-background-color: #006363;
+        -fx-text-fill: white;
+    }
+
+
+
+
+
+
+

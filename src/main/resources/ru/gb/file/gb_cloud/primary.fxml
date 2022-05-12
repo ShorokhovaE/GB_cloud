@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.file.gb_cloud.PrimaryController">
+   <top>
+      <HBox maxHeight="Infinity">
+         <Button maxWidth="Infinity" minHeight="30" onAction="#OpenAuthPanel" text="Авторизация" HBox.hgrow="ALWAYS">
+            <HBox.margin>
+               <Insets left="10.0" right="3.0" />
+            </HBox.margin></Button>
+         <Button maxWidth="Infinity" minHeight="30" onAction="#OpenRegPanel" text="Регистрация" HBox.hgrow="ALWAYS">
+            <HBox.margin>
+               <Insets left="3.0" right="10.0" />
+            </HBox.margin></Button>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
+      </HBox>
+   </top>
+
+   <center>
+      <StackPane>
+         <VBox fx:id="RegPanel" alignment="TOP_CENTER" managed="false" maxHeight="300" maxWidth="Infinity" visible="false">
+            <Label alignment="CENTER" maxWidth="Infinity" minHeight="30" text="Регистрация">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin></Label>
+            <Label fx:id="RegNo" alignment="CENTER" maxWidth="Infinity" minHeight="30" text="Пользователь с таким логином уже есть" managed="false" visible="false" />
+            <Label fx:id="PassSame" alignment="CENTER" maxWidth="Infinity" minHeight="30" text="Пароли не совпадают" managed="false" visible="false" />
+            <TextField fx:id="RegLogin" maxWidth="Infinity" minHeight="30" promptText="Придумайте логин">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" />
+               </VBox.margin></TextField>
+            <PasswordField fx:id="RegPassword" maxWidth="Infinity" minHeight="30" promptText="Придумайте пароль">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" />
+               </VBox.margin></PasswordField>
+            <PasswordField fx:id="RegPasswordCopy" maxWidth="Infinity" minHeight="30" promptText="Повторите пароль">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" />
+               </VBox.margin></PasswordField>
+            <Button onAction="#ClickBtnReg" maxWidth="Infinity" minHeight="30" text="Зарегистрироваться" HBox.hgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" />
+               </VBox.margin></Button>
+         </VBox>
+         <VBox fx:id="AuthPanel" managed="true" maxHeight="300" maxWidth="Infinity" visible="true">
+            <Label alignment="CENTER" maxWidth="Infinity" minHeight="30" text="Авторизация">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin></Label>
+            <Label fx:id="LoginNo" alignment="CENTER" maxWidth="Infinity" minHeight="30" text="Логин или пароль введены неверно" managed="false" visible="false" />
+            <TextField fx:id="AuthLogin" maxWidth="Infinity" minHeight="30" promptText="Введите свой логин">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" />
+               </VBox.margin></TextField>
+            <PasswordField fx:id="AuthPassword" maxWidth="Infinity" minHeight="30" promptText="Введите свой пароль">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" />
+               </VBox.margin></PasswordField>
+            <Button maxWidth="Infinity" minHeight="30" onAction="#clickBtnGo" text="Войти" HBox.hgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" />
+               </VBox.margin></Button>
+            <StackPane.margin>
+               <Insets />
+            </StackPane.margin>
+         </VBox>
+      </StackPane>
+   </center>
+
+   <bottom>
+         <Button maxWidth="Infinity" minHeight="30" onAction="#loginOk" text="Ко второму экрану"/>
+   </bottom>
+</BorderPane>
