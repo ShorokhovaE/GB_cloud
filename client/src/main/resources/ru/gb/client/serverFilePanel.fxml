@@ -22,8 +22,8 @@
         <TextField fx:id="NameOfNewDir" promptText="Название папки" />
         <Button fx:id="BtnNewDir" text="Создать" onAction="#clickBtnCreateNewDir" />
     </HBox>
-<!--    <Label fx:id="msgMaxDirDepth" text="Вы достигли максимальной глубины директории"/>-->
     <Button fx:id="BtnViewNewDiePanel" maxWidth="Infinity" onAction="#clickBtnViewNewDirPanel" text="Новая папка" textAlignment="CENTER" HBox.hgrow="ALWAYS" managed="true" visible="true"/>
     <Button maxWidth="Infinity" onAction="#clickBtnDownload" text="Скачать файл" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
+    <Button maxWidth="Infinity" onAction="#clickBtnDelete" text="Удалить" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
 
 </VBox>

@@ -1,19 +1,19 @@
 package ru.gb.client;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import ru.gb.dto.LoadFileRequest;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +28,7 @@ public class LocalFilePanelController implements Initializable {
     public TableView <FileInfo> fileTable;
 
     private Connect connect;
+    private ServerFilePanelController serverPanel;
 
 
     @Override
@@ -35,13 +36,38 @@ public class LocalFilePanelController implements Initializable {
 
         ControllerRegistry.register(this);
 
+
         TableColumn<FileInfo, String> fileNameColumn //
                 = new TableColumn<FileInfo, String>("Имя файла");
 
         fileNameColumn.setCellValueFactory(param ->
                 new SimpleStringProperty(param.getValue().getFileName()));
 
-        fileTable.getColumns().add(fileNameColumn);
+        TableColumn<FileInfo, Long> fileSizeColumn = new TableColumn<>("Размер");
+        fileSizeColumn.setCellValueFactory(param ->
+                new SimpleObjectProperty<>(param.getValue().getSize()));
+        fileSizeColumn.setPrefWidth(100);
+        fileSizeColumn.setCellFactory(param -> {
+            return new TableCell<FileInfo, Long>() {
+                @Override
+                protected void updateItem(Long item, boolean empty) {
+                    super.updateItem(item,empty);
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        String text = String.format("%,d bytes",item);
+                        if (item == -1L) {
+                            text = "[DIR]";
+                        }
+                        setText(text);
+                    }
+                }
+            };
+        });
+
+        fileTable.getColumns().addAll(fileNameColumn, fileSizeColumn);
+
 
         fileTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -80,27 +106,33 @@ public class LocalFilePanelController implements Initializable {
     @FXML
     public void clickBtnLoad(ActionEvent actionEvent) throws IOException {
 
-        if(fileTable.getSelectionModel().getSelectedItem().getFileName() == null){
-            System.out.println("файл не выбран");
+        serverPanel = (ServerFilePanelController) ControllerRegistry.getControllerObject(ServerFilePanelController.class);
+
+        if(fileTable.getSelectionModel().getSelectedItem() == null){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Файл не выбран", ButtonType.OK);
+            alert.showAndWait();
+        } else if(fileTable.getSelectionModel().getSelectedItem().getType().equals("D")){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Папку нельзя загрузить. Выберите файл", ButtonType.OK);
+            alert.showAndWait();
+        } else if(!serverPanel.checkLimitForLoad(fileTable.getSelectionModel().getSelectedItem().getSize())){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Для этого файла не хватает места :( \nВыберите другой файл или удалите что-нибудь", ButtonType.OK);
+            alert.showAndWait();
         } else {
-            System.out.println(fileTable.getSelectionModel().getSelectedItem().getFileName());
-            System.out.println(fileTable.getSelectionModel().getSelectedItem().getPath());
+            ServerFilePanelController sc =
+                    (ServerFilePanelController)ControllerRegistry.getControllerObject(ServerFilePanelController.class);
+
+            LoadFileRequest loadFileRequest =
+                    new LoadFileRequest
+                            (new File(String.valueOf(fileTable.getSelectionModel().getSelectedItem().getPath())),
+                                    fileTable.getSelectionModel().getSelectedItem().getFileName(),
+                                    sc.pathField.getText());
+
+            PrimaryController pr =
+                    (PrimaryController) ControllerRegistry.getControllerObject(PrimaryController.class);
+
+            connect = pr.getConnect();
+            connect.getChannel().writeAndFlush(loadFileRequest);
         }
-
-        ServerFilePanelController sc =
-                (ServerFilePanelController)ControllerRegistry.getControllerObject(ServerFilePanelController.class);
-
-        LoadFileRequest loadFileRequest =
-                new LoadFileRequest
-                        (new File(String.valueOf(fileTable.getSelectionModel().getSelectedItem().getPath())),
-                        fileTable.getSelectionModel().getSelectedItem().getFileName(),
-                        sc.pathField.getText());
-
-        PrimaryController pr =
-                (PrimaryController) ControllerRegistry.getControllerObject(PrimaryController.class);
-
-        connect = pr.getConnect();
-        connect.getChannel().writeAndFlush(loadFileRequest);
 
     }
 
