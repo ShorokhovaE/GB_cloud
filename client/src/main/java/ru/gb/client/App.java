@@ -21,13 +21,6 @@ public class App extends Application {
         scene = new Scene(loadFXML("primary"), 640, 480);
         stage.setScene(scene);
         stage.show();
-//        stage.setOnCloseRequest(windowEvent -> {
-//            System.out.println("Клиент хочет выйти");
-//                Platform.exit();
-//                PrimaryController pr =
-//                        (PrimaryController) ControllerRegistry.getControllerObject(PrimaryController.class);
-//                pr.getConnect().getChannel().close();
-//        });
     }
 
     static void setRoot(String fxml) throws IOException {

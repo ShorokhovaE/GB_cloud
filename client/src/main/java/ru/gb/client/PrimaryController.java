@@ -2,12 +2,15 @@ package ru.gb.client;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import ru.gb.dto.AuthRequest;
 import ru.gb.dto.RegRequest;
 //import ru.gb.file.gb_cloud.dto.AuthRequest;
@@ -32,6 +35,7 @@ public class PrimaryController implements Initializable {
     public TextField RegLogin;
     @FXML
     public PasswordField RegPassword, RegPasswordCopy;
+    private static Stage stage;
 
     public Connect getConnect() {
         return connect;
@@ -61,7 +65,7 @@ public class PrimaryController implements Initializable {
         RegPanel.setVisible(true);
         RegPanel.setManaged(true);
     }
-// авторизация
+
     @FXML
     public void clickBtnGo(ActionEvent actionEvent) {
         AuthRequest authRequest = new AuthRequest(AuthLogin.getText().trim(), AuthPassword.getText().trim());
@@ -88,6 +92,17 @@ public class PrimaryController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ControllerRegistry.register(this);
         connect = new Connect();
+
+        Platform.runLater(() -> {
+            stage = (Stage) AuthPanel.getScene().getWindow();
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent windowEvent) {
+                    stage.close();
+                    Connect.getEventLoopGroup().shutdownGracefully();
+                }
+            });
+        });
     }
 
     public void ClickBtnReg(ActionEvent actionEvent) {

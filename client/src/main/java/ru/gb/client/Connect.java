@@ -21,9 +21,11 @@ public class Connect {
     public static final int MB_20 = 20 * 1_000_000;
     private Channel channel;
 
+    private static EventLoopGroup eventLoopGroup;
+
     public Connect(){
         new Thread(() -> {
-            EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
+            eventLoopGroup = new NioEventLoopGroup();
             Bootstrap bootstrap = new Bootstrap();
             bootstrap.group(eventLoopGroup);
             bootstrap.channel(NioSocketChannel.class);
@@ -57,5 +59,9 @@ public class Connect {
 
     public void close(){
         channel.close();
+    }
+
+    public static EventLoopGroup getEventLoopGroup() {
+        return eventLoopGroup;
     }
 }

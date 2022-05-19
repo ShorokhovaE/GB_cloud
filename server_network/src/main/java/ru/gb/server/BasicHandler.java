@@ -38,6 +38,7 @@ public class BasicHandler extends ChannelInboundHandlerAdapter {
             }
         } else if(request instanceof RegRequest){
             if(((RegRequest) request).registration()){
+                ((RegRequest) request).hashPassword();
                 BasicResponse regOkResponse = new BasicResponse(REG_OK);
                 channelHandlerContext.writeAndFlush(regOkResponse);
             } else {

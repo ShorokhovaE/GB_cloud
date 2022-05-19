@@ -1,14 +1,19 @@
 package ru.gb.dto;
 
 import java.io.File;
+import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.regex.Pattern;
+
 
 public class RegRequest implements BasicRequest{
 
     private String login;
     private String password;
+
+
 
     @Override
     public String getType() {
@@ -20,15 +25,6 @@ public class RegRequest implements BasicRequest{
         this.password = password;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    //регистрация
     public boolean registration() {
 
         try {
@@ -38,8 +34,9 @@ public class RegRequest implements BasicRequest{
                     return false;
                 }
             }
+            hashPassword();
             addInDB(login, password);
-            createDirectory(login); //создали директорию
+            createDirectory(login);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -47,7 +44,7 @@ public class RegRequest implements BasicRequest{
         }
     }
 
-    //метод для добавления учетки в БД
+
     public void addInDB(String login, String password) throws SQLException {
         PreparedStatement psInsert =
                 DBConnect.getConnection().prepareStatement("INSERT INTO clients (login, password) VALUES ( ? , ? );");
@@ -56,8 +53,13 @@ public class RegRequest implements BasicRequest{
         psInsert.executeUpdate();
     }
 
-    //создали директорию
+
     public void createDirectory(String login){
         new File("client-dir/", login).mkdirs();
+    }
+
+    public void hashPassword(){
+        PBKBF2HashPassword hashPassword = new PBKBF2HashPassword(10);
+        this.password = hashPassword.hash(password);
     }
 }

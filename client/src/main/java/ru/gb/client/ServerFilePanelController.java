@@ -41,7 +41,7 @@ public class ServerFilePanelController implements Initializable {
 
     private Connect connect;
     private PrimaryController pr;
-    private static final int MAXFILESSIZE = 2 * 1_000;
+    private static final int MAXFILESSIZE = 2 * 1_000_000;
 
 
     private static long currentFilesSize;
@@ -210,9 +210,8 @@ public class ServerFilePanelController implements Initializable {
                 return;
             }
         }
-
-
     }
+
 
     public static void recursiveDelete(File file) {
         if (!file.exists())

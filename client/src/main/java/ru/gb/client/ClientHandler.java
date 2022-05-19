@@ -39,6 +39,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 
         if("log_off".equals(responseText)) {
             System.out.println("Клиент вышел");
+            Connect.getEventLoopGroup().shutdownGracefully();
 
         } if("load_ok".equals((responseText))){
             ServerFilePanelController serverPanel =

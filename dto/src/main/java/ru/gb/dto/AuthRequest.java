@@ -17,9 +17,6 @@ public class AuthRequest implements BasicRequest {
         return login;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
     @Override
     public String getType() {
@@ -30,9 +27,10 @@ public class AuthRequest implements BasicRequest {
 //    //проверка наличия учетной записи
     public boolean checkLoginAndPassword() {
         try {
+            PBKBF2HashPassword hashPassword = new PBKBF2HashPassword(10);
             ResultSet rs = DBConnect.getStm().executeQuery("SELECT * FROM clients;");
             while (rs.next()) {
-                if (rs.getString("login").equals(login) && rs.getString("password").equals(password)) {
+                if ( rs.getString("login").equals(login) && hashPassword.checkPassword(password, rs.getString("password"))){
                     return true;
                 }
             }
