@@ -145,9 +145,12 @@ public class ServerFilePanelController implements Initializable {
         if(fileTable.getSelectionModel().getSelectedItem() == null){
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Файл не выбран", ButtonType.OK);
             alert.showAndWait();
-        } else if(fileTable.getSelectionModel().getSelectedItem().getType().equals("D")){
+        } else if(fileTable.getSelectionModel().getSelectedItem().getType().equals("D")) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Папку нельзя скачать. Выберите файл", ButtonType.OK);
             alert.showAndWait();
+        } else if(fileTable.getSelectionModel().getSelectedItem().getSize() > Connect.MB_20){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Слишком большой файл, давай не будем рисковать :)", ButtonType.OK);
+                alert.showAndWait();
         } else {
             DownloadFileRequest dfr =
                     new DownloadFileRequest(String.valueOf(fileTable.getSelectionModel().getSelectedItem().getPath()),

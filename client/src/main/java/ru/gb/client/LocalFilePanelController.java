@@ -114,6 +114,9 @@ public class LocalFilePanelController implements Initializable {
         } else if(fileTable.getSelectionModel().getSelectedItem().getType().equals("D")){
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Папку нельзя загрузить. Выберите файл", ButtonType.OK);
             alert.showAndWait();
+        } else if(fileTable.getSelectionModel().getSelectedItem().getSize() > Connect.MB_20){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Слишком большой файл, давай не будем рисковать :)", ButtonType.OK);
+            alert.showAndWait();
         } else if(!serverPanel.checkLimitForLoad(fileTable.getSelectionModel().getSelectedItem().getSize())){
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Для этого файла не хватает места :( \nВыберите другой файл или удалите что-нибудь", ButtonType.OK);
             alert.showAndWait();
