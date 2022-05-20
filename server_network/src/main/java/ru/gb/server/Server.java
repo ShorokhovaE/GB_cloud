@@ -31,12 +31,11 @@ public class Server {
                             inbound.addLast(
                                     new ObjectDecoder(MB_20, ClassResolvers.cacheDisabled(null)),
                                     new ObjectEncoder(),
-                                    new BasicHandler()
+                                    new ServerHandler()
                             );
                         }
                     });
 
-            // подключаемся к БД
             try {
                 DBConnect.connect();
             } catch (Exception e) {
@@ -48,6 +47,7 @@ public class Server {
         } finally {
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
+            DBConnect.disconnect();
         }
     }
 

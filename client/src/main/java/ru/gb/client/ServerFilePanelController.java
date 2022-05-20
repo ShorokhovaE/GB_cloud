@@ -1,5 +1,6 @@
 package ru.gb.client;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -9,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import ru.gb.dto.DeleteFileRequest;
 import ru.gb.dto.DownloadFileRequest;
 //import ru.gb.file.gb_cloud.dto.DownloadFileRequest;
 
@@ -29,21 +31,16 @@ import java.util.stream.Collectors;
 public class ServerFilePanelController implements Initializable {
 
     @FXML
-    public TextField pathField;
+    public TextField pathField, NameOfNewDir;
     @FXML
     public TableView <FileInfo> fileTable;
     @FXML
     public HBox newDirPanel;
     @FXML
-    public TextField NameOfNewDir;
     public Button BtnViewNewDiePanel;
-
-
     private Connect connect;
     private PrimaryController pr;
     private static final int MAXFILESSIZE = 2 * 1_000_000;
-
-
     private static long currentFilesSize;
 
 
@@ -56,6 +53,7 @@ public class ServerFilePanelController implements Initializable {
 
         fileNameColumn.setCellValueFactory(param ->
                 new SimpleStringProperty(param.getValue().getFileName()));
+        fileNameColumn.setPrefWidth(100);
 
         TableColumn<FileInfo, Long> fileSizeColumn = new TableColumn<>("Размер");
         fileSizeColumn.setCellValueFactory(param ->
@@ -94,15 +92,18 @@ public class ServerFilePanelController implements Initializable {
             }
         });
 
-        pr= (PrimaryController) ControllerRegistry.getControllerObject(PrimaryController.class);
-        updatePath(Path.of("client-dir/", pr.AuthLogin.getText().trim()));
+        pr = (PrimaryController) ControllerRegistry.getControllerObject(PrimaryController.class);
+        updatePath(Path.of("./client-dir/", pr.AuthLogin.getText().trim()));
+
+        connect = pr.getConnect();
 
     }
 
     @FXML
     public void btnUpAction(ActionEvent actionEvent) {
 
-        String minPath = String.format("/Users/elenasorohova/Desktop/GB_cloud/client-dir/%s", pr.AuthLogin.getText().trim());
+        String  minPath = Path.of(String.format("./client-dir/%s", pr.AuthLogin.getText().trim()))
+                .normalize().toAbsolutePath().toString();
 
         if (pathField.getText().equals(minPath)){
             updatePath(Path.of(pathField.getText()));
@@ -116,7 +117,7 @@ public class ServerFilePanelController implements Initializable {
 
     public boolean checkLimitForLoad(long size) throws IOException {
 
-        this.currentFilesSize = Files.walk(Path.of("/Users/elenasorohova/Desktop/GB_cloud/client-dir/", pr.AuthLogin.getText().trim()))
+        this.currentFilesSize = Files.walk(Path.of("./client-dir/", pr.AuthLogin.getText().trim()))
                 .map(Path::toFile)
                 .filter(File::isFile)
                 .mapToLong(File::length)
@@ -128,6 +129,7 @@ public class ServerFilePanelController implements Initializable {
         }
     }
 
+    @FXML
     public void updatePath(Path path){
         try {
             pathField.setText(path.normalize().toAbsolutePath().toString());
@@ -143,23 +145,26 @@ public class ServerFilePanelController implements Initializable {
     public void clickBtnDownload(ActionEvent actionEvent) {
 
         if(fileTable.getSelectionModel().getSelectedItem() == null){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Файл не выбран", ButtonType.OK);
-            alert.showAndWait();
-        } else if(fileTable.getSelectionModel().getSelectedItem().getType().equals("D")) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Папку нельзя скачать. Выберите файл", ButtonType.OK);
-            alert.showAndWait();
+            alertInfo("Файл не выбран");
+        } else if(fileTable.getSelectionModel().getSelectedItem().getPath().toFile().isDirectory()) {
+            alertInfo("Папку нельзя скачать. Выберите файл");
         } else if(fileTable.getSelectionModel().getSelectedItem().getSize() > Connect.MB_20){
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Слишком большой файл, давай не будем рисковать :)", ButtonType.OK);
-                alert.showAndWait();
+            alertInfo("Слишком большой файл, давай не будем рисковать :)");
         } else {
+
             DownloadFileRequest dfr =
                     new DownloadFileRequest(String.valueOf(fileTable.getSelectionModel().getSelectedItem().getPath()),
                             String.valueOf(fileTable.getSelectionModel().getSelectedItem().getFileName()));
 
-            connect = pr.getConnect();
             connect.getChannel().writeAndFlush(dfr);
         }
 
+    }
+
+    @FXML
+    public void alertInfo(String msg){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
+        alert.showAndWait();
     }
 
     @FXML
@@ -192,38 +197,24 @@ public class ServerFilePanelController implements Initializable {
 
     @FXML
     public void clickBtnDelete(ActionEvent actionEvent) {
-        if(fileTable.getSelectionModel().getSelectedItem() == null){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Файл не выбран", ButtonType.OK);
-            alert.showAndWait();
-        }  else {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Удаление");
-            alert.setHeaderText("Вы действительно хотите удалить " + fileTable.getSelectionModel().getSelectedItem().getFileName() + " ?");
-            Optional<ButtonType> option = alert.showAndWait();
 
-            if (option.get() == ButtonType.OK) {
-                recursiveDelete(new File(String.valueOf(fileTable.getSelectionModel().getSelectedItem().getPath())));
-                updatePath((Path.of(pathField.getText())));
-                Alert alertDel = new Alert(Alert.AlertType.INFORMATION);
-                alertDel.setHeaderText("Файл удален!");
-                alertDel.showAndWait();
-            } else if (option.get() == ButtonType.CANCEL) {
-                return;
-            } else {
-                return;
-            }
+        if (fileTable.getSelectionModel().getSelectedItem() == null) {
+                alertInfo("Файл не выбран");
+        } else {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Удаление");
+                alert.setHeaderText("Вы действительно хотите удалить " + fileTable.getSelectionModel().getSelectedItem().getFileName() + " ?");
+                Optional<ButtonType> option = alert.showAndWait();
+                if (option.get() == ButtonType.OK) {
+                    DeleteFileRequest dfr = new DeleteFileRequest(fileTable.getSelectionModel().getSelectedItem().getPath().toString());
+                    connect.getChannel().writeAndFlush(dfr);
+                } else if (option.get() == ButtonType.CANCEL) {
+                    return;
+                } else {
+                    return;
+                }
+            });
         }
-    }
-
-
-    public static void recursiveDelete(File file) {
-        if (!file.exists())
-            return;
-        if (file.isDirectory()) {
-            for (File f : file.listFiles()) {
-                recursiveDelete(f);
-            }
-        }
-        file.delete();
     }
 }

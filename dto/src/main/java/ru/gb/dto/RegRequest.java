@@ -1,11 +1,9 @@
 package ru.gb.dto;
 
 import java.io.File;
-import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.regex.Pattern;
 
 
 public class RegRequest implements BasicRequest{

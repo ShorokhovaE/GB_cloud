@@ -1,7 +1,5 @@
 package ru.gb.client;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -16,15 +14,6 @@ public class FileInfo {
     private String type;
     private final static String ISDIRECTORY = "Dir";
     private final static String ISFILE = "File";
-
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public String getType() {
-        return type;
-    }
 
 
     public FileInfo(Path path) {
@@ -44,5 +33,9 @@ public class FileInfo {
 
     public long getSize() {
         return size;
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 }

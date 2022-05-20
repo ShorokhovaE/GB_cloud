@@ -26,7 +26,6 @@ public class LocalFilePanelController implements Initializable {
     public TextField pathField;
     @FXML
     public TableView <FileInfo> fileTable;
-
     private Connect connect;
     private ServerFilePanelController serverPanel;
 
@@ -42,6 +41,7 @@ public class LocalFilePanelController implements Initializable {
 
         fileNameColumn.setCellValueFactory(param ->
                 new SimpleStringProperty(param.getValue().getFileName()));
+        fileNameColumn.setPrefWidth(100);
 
         TableColumn<FileInfo, Long> fileSizeColumn = new TableColumn<>("Размер");
         fileSizeColumn.setCellValueFactory(param ->
@@ -109,26 +109,20 @@ public class LocalFilePanelController implements Initializable {
         serverPanel = (ServerFilePanelController) ControllerRegistry.getControllerObject(ServerFilePanelController.class);
 
         if(fileTable.getSelectionModel().getSelectedItem() == null){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Файл не выбран", ButtonType.OK);
-            alert.showAndWait();
-        } else if(fileTable.getSelectionModel().getSelectedItem().getType().equals("D")){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Папку нельзя загрузить. Выберите файл", ButtonType.OK);
-            alert.showAndWait();
+            alertInfo("Файл не выбран");
+        } else if(fileTable.getSelectionModel().getSelectedItem().getPath().toFile().isDirectory()){
+            alertInfo("Папку нельзя загрузить. Выберите файл");
         } else if(fileTable.getSelectionModel().getSelectedItem().getSize() > Connect.MB_20){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Слишком большой файл, давай не будем рисковать :)", ButtonType.OK);
-            alert.showAndWait();
+            alertInfo("Слишком большой файл, давай не будем рисковать :)");
         } else if(!serverPanel.checkLimitForLoad(fileTable.getSelectionModel().getSelectedItem().getSize())){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Для этого файла не хватает места :( \nВыберите другой файл или удалите что-нибудь", ButtonType.OK);
-            alert.showAndWait();
+            alertInfo("Для этого файла не хватает места :( \nВыберите другой файл или удалите что-нибудь");
         } else {
-            ServerFilePanelController sc =
-                    (ServerFilePanelController)ControllerRegistry.getControllerObject(ServerFilePanelController.class);
 
             LoadFileRequest loadFileRequest =
                     new LoadFileRequest
                             (new File(String.valueOf(fileTable.getSelectionModel().getSelectedItem().getPath())),
                                     fileTable.getSelectionModel().getSelectedItem().getFileName(),
-                                    sc.pathField.getText());
+                                    serverPanel.pathField.getText());
 
             PrimaryController pr =
                     (PrimaryController) ControllerRegistry.getControllerObject(PrimaryController.class);
@@ -139,8 +133,14 @@ public class LocalFilePanelController implements Initializable {
 
     }
 
+    public void alertInfo(String msg){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
+        alert.showAndWait();
+    }
+
     @FXML
     public void btnUpdateFileList(ActionEvent actionEvent) {
         updatePath(Path.of(pathField.getText()));
     }
+
 }

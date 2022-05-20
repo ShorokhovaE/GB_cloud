@@ -20,7 +20,6 @@ public class Connect {
 
     public static final int MB_20 = 20 * 1_000_000;
     private Channel channel;
-
     private static EventLoopGroup eventLoopGroup;
 
     public Connect(){

@@ -18,11 +18,17 @@ public class SecondaryController implements Initializable {
     @FXML
     public ServerFilePanelController rightPC;
     @FXML
-    public VBox leftPanel;
-    @FXML
-    public VBox rightPanel;
-
+    public VBox leftPanel, rightPanel;
     private Connect connect;
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        ControllerRegistry.register(this);
+
+        leftPC = (LocalFilePanelController) leftPanel.getUserData();
+        rightPC = (ServerFilePanelController) rightPanel.getUserData();
+    }
 
     @FXML
     public void clickBtnExit(ActionEvent actionEvent) throws IOException {
@@ -35,13 +41,5 @@ public class SecondaryController implements Initializable {
         connect.getChannel().writeAndFlush(disconnectRequest);
 
         App.setRoot("primary");
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        ControllerRegistry.register(this);
-
-        leftPC = (LocalFilePanelController) leftPanel.getUserData();
-        rightPC = (ServerFilePanelController) rightPanel.getUserData();
     }
 }

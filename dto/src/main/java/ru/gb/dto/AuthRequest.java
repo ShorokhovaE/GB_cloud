@@ -24,7 +24,6 @@ public class AuthRequest implements BasicRequest {
     }
 
 
-//    //проверка наличия учетной записи
     public boolean checkLoginAndPassword() {
         try {
             PBKBF2HashPassword hashPassword = new PBKBF2HashPassword(10);

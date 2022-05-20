@@ -13,18 +13,19 @@ public class LoadFileRequest implements BasicRequest {
     private String pathForLoad;
 
 
+
+    public LoadFileRequest(File file, String fileName, String pathForLoad) {
+        this.file = file;
+        this.fileName = fileName;
+        this.pathForLoad = pathForLoad;
+    }
+
     public String getFilename() {
         return fileName;
     }
 
     public String getPathForLoad() {
         return pathForLoad;
-    }
-
-    public LoadFileRequest(File file, String fileName, String pathForLoad) {
-        this.file = file;
-        this.fileName = fileName;
-        this.pathForLoad = pathForLoad;
     }
 
     @Override

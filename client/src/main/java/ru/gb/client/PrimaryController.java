@@ -36,18 +36,33 @@ public class PrimaryController implements Initializable {
     @FXML
     public PasswordField RegPassword, RegPasswordCopy;
     private static Stage stage;
+    private Connect connect;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        ControllerRegistry.register(this);
+        connect = new Connect();
+
+        Platform.runLater(() -> {
+            stage = (Stage) AuthPanel.getScene().getWindow();
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent windowEvent) {
+                    stage.close();
+                    Connect.getEventLoopGroup().shutdownGracefully();
+                }
+            });
+        });
+    }
 
     public Connect getConnect() {
         return connect;
     }
 
-    private Connect connect;
-
     @FXML
     public void loginOk() throws IOException {
        App.setRoot("secondary");
     }
-
 
     @FXML
     public void OpenAuthPanel(ActionEvent actionEvent) {
@@ -72,6 +87,7 @@ public class PrimaryController implements Initializable {
         connect.getChannel().writeAndFlush(authRequest);
     }
 
+    @FXML
     public void clearMsg(){
         EmptyFieldReg.setManaged(false);
         EmptyFieldReg.setVisible(false);
@@ -83,28 +99,13 @@ public class PrimaryController implements Initializable {
         PassSame.setVisible(false);
     }
 
+    @FXML
     public void viewMsg(Label msg){
         msg.setVisible(true);
         msg.setManaged(true);
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        ControllerRegistry.register(this);
-        connect = new Connect();
-
-        Platform.runLater(() -> {
-            stage = (Stage) AuthPanel.getScene().getWindow();
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                @Override
-                public void handle(WindowEvent windowEvent) {
-                    stage.close();
-                    Connect.getEventLoopGroup().shutdownGracefully();
-                }
-            });
-        });
-    }
-
+    @FXML
     public void ClickBtnReg(ActionEvent actionEvent) {
         clearMsg();
         if(!RegPassword.getText().trim().equals(RegPasswordCopy.getText().trim())){
