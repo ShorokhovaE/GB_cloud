@@ -17,14 +17,6 @@ import java.util.Optional;
 public class ClientHandler extends ChannelInboundHandlerAdapter {
 
     PrimaryController pr;
-    private final static String LOGIN_OK = "login_ok";
-    private final static String LOGIN_NO = "login_no";
-    private final static String REG_OK = "reg_ok";
-    private final static String REG_NO = "reg_no";
-    private final static String LOG_OFF = "log_off";
-    private final static String LOAD_OK = "load_ok";
-    private final static String DOWNLOAD_OK = "download_ok";
-    private final static String DELETE_OK = "delete_ok";
 
 
     @Override
